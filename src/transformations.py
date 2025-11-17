@@ -1,5 +1,5 @@
 from typing import Literal, Optional
-import sympy as sy
+import sympy as sp
 
 
 def get_rotation(var: str, axis: Literal['x', 'y', 'z'], dim: Literal[2, 3]) -> sy.Matrix:
