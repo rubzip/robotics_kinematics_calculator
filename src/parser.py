@@ -1,11 +1,14 @@
 import re
-from sympy import sp
+from typing import Literal, Optional
+
+import sympy as sp
+
 from .transformations import get_rotation, get_translation
 
 
 PATTERN = r"([TR])\s*([xyz])\s*\((\w+)\)"
 
-def parse(expr: str, dim: Literal[2, 3] = 3) -> Optional[sy.Matrix]:
+def parse(expr: str, dim: Literal[2, 3] = 3) -> Optional[sp.Matrix]:
     expressions = re.findall(PATTERN, expr)
     if not expressions:
         return None
@@ -15,4 +18,5 @@ def parse(expr: str, dim: Literal[2, 3] = 3) -> Optional[sy.Matrix]:
             M = M * get_rotation(var, axis, dim)
         elif operator == 'T':
             M = M * get_translation(var, axis, dim)
+        M = M.applyfunc(sp.factor).applyfunc(sp.trigsimp)
     return sp.simplify(M)
